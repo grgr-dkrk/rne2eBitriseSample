@@ -8,32 +8,41 @@ workflows:
       - activate-ssh-key@4:
           run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
       - git-clone@4: {}
+      - cache-pull@2:
+          title: Pull Cache
       - yarn@0:
+          title: yarn install
           inputs:
             - command: install
-          title: yarn install
       - yarn@0:
+          title: Detox Build
           inputs:
             - command: detox build -c android.emu.ci
-          title: Detox Build
       - avd-manager@1:
+          title: Setup Android Emulator
           inputs:
             - emulator_id: emulator-5554
-          title: Setup Android Emulator
       - wait-for-android-emulator@1:
           inputs:
             - boot_timeout: '3000'
       - yarn@0:
+          title: Detox Test
+          is_always_run: true
           inputs:
             - verbose_log: 'yes'
             - command:
                 detox test -c android.emu.ci -u -H -R -d 5000 -a $BITRISE_DEPLOY_DIR/detox/
                 --take-screenshots all --record-logs all
-          title: Detox Test
-          is_always_run: true
       - deploy-to-bitrise-io@1:
           inputs:
             - is_compress: 'true'
+      - cache-push@2:
+          title: Push Cache
+          inputs:
+            - cache_paths: |-
+                $BITRISE_CACHE_DIR
+                node_modules -> yarn.lock
+          is_always_run: true
 app:
   envs:
     - opts:
