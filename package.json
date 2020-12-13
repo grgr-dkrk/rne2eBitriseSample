@@ -6,13 +6,15 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "android:setup": "sh ./scripts/runAndroid.sh",
+    "build:android:ci": "detox build -c android.emu.ci",
+    "test:android:ci": "detox test -c android.emu.ci -u -H -R -d 10000 -a artifacts/detox/ --take-screenshots all --record-logs all"
   },
   "dependencies": {
+    "detox": "^17.14.3",
     "react": "16.13.1",
-    "react-native": "0.63.3",
-    "detox": "^17.14.3"
+    "react-native": "0.63.3"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -32,6 +34,7 @@
     "pod-install": "^0.1.13",
     "prettier": "^2.1.2",
     "react-test-renderer": "16.13.1",
+    "ts-jest": "^26.4.4",
     "typescript": "^3.8.3"
   },
   "jest": {
