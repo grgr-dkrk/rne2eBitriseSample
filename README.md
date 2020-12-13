@@ -16,7 +16,8 @@ yarn
 ## Test on Local(Android)
 
 ```shell
-yarn build:android:ci && yarn android:setup && yarn test:android:ci
+yarn build:android:ci
+yarn test:android:ci
 ```
 
 ## Test on Bitrise(Android)
