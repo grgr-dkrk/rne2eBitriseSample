@@ -17,6 +17,9 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
+      - name: check HAXM
+        run: kextstat | grep intel
+
       - uses: actions/cache@v2
         id: yarn-cache
         with:
