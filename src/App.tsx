@@ -1,119 +1,83 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
 import React from 'react'
 import {
-  SafeAreaView,
+  KeyboardAvoidingView,
   StyleSheet,
-  ScrollView,
-  View,
+  SafeAreaView,
   Text,
-  StatusBar,
+  View,
+  TextInput,
+  TouchableOpacity,
 } from 'react-native'
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen'
-
-declare const global: { HermesInternal: null | {} }
-
-const App = () => {
+export const App = () => {
+  const [formText, setFormText] = React.useState('')
+  const [resultText, setResultText] = React.useState('')
+  const handleChangeText = React.useCallback(
+    (value: string) => {
+      setFormText(value)
+    },
+    [formText],
+  )
+  const handlePress = React.useCallback(() => {
+    setResultText(formText)
+  }, [formText])
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}
-        >
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View testID="isHermes" style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change
-                this screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+    <SafeAreaView style={styles.wrapper}>
+      <KeyboardAvoidingView style={styles.inner}>
+        {resultText ? (
+          <View>
+            <Text accessibilityLiveRegion="polite">
+              文字数は{[...resultText].length}です。
+            </Text>
           </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+        ) : null}
+        <View style={styles.formWrapper}>
+          <Text style={styles.label}>何らかのテキストを入力</Text>
+          <TextInput
+            accessible
+            accessibilityLabel={'カウントしたい文字を入力'}
+            defaultValue={formText}
+            onChangeText={handleChangeText}
+            style={styles.input}
+            testID="Input"
+          />
+        </View>
+        <View style={styles.buttonWraper}>
+          <TouchableOpacity
+            accessible
+            accessibilityLabel="入力された文字数をカウントする"
+            accessibilityRole="button"
+            onPress={handlePress}
+            disabled={!formText?.length}
+            testID="Button"
+          >
+            <Text>
+              {formText?.length ? '文字数をカウントする' : '文字を入力してね'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  wrapper: {
+    flex: 1,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  inner: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
   },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
+  formWrapper: {},
+  label: {},
+  input: {
+    borderWidth: 1,
     marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
   },
-  highlight: {
-    fontWeight: '700',
+  buttonWraper: {
+    marginTop: 16,
   },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+  button: {},
 })
-
-export default App
