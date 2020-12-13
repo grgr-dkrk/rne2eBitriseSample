@@ -1,0 +1,56 @@
+---
+format_version: '8'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: react-native
+workflows:
+  android-e2e:
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - git-clone@4: {}
+      - yarn@0:
+          inputs:
+            - command: install
+          title: yarn install
+      - yarn@0:
+          inputs:
+            - command: detox build -c android.emu.ci
+          title: Detox Build
+      - avd-manager@1:
+          inputs:
+            - emulator_id: emulator-5554
+          title: Setup Android Emulator
+      - wait-for-android-emulator@1:
+          inputs:
+            - boot_timeout: '3000'
+      - yarn@0:
+          inputs:
+            - verbose_log: 'yes'
+            - command:
+                detox test -c android.emu.ci -u -H -R -d 5000 -a $BITRISE_DEPLOY_DIR/detox/
+                --take-screenshots all --record-logs all
+          title: Detox Test
+          is_always_run: true
+      - deploy-to-bitrise-io@1:
+          inputs:
+            - is_compress: 'true'
+app:
+  envs:
+    - opts:
+        is_expand: false
+      PROJECT_LOCATION: android
+    - opts:
+        is_expand: false
+      MODULE: app
+    - opts:
+        is_expand: false
+      VARIANT: ''
+    - opts:
+        is_expand: false
+      BITRISE_PROJECT_PATH: ios/rne2ebitrisesample.xcworkspace
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: rne2ebitrisesample
+    - opts:
+        is_expand: false
+      BITRISE_EXPORT_METHOD: development
