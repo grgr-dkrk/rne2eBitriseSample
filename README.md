@@ -4,30 +4,31 @@
 
 - React Native 0.63
 - Detox 17.14.3
+- Yarn 1.22.0
 - macOS 10.15
 
-## Install
+## Setup
 
 ```shell
 yarn
 ```
 
-## Android
-
-### Detox Build
+## Test on Local(Android)
 
 ```shell
-yarn build:android:ci
+yarn build:android:ci && yarn android:setup && yarn test:android:ci
 ```
 
-### Creating an Android Emulator
+## Test on Bitrise(Android)
+
+### install
 
 ```shell
-yarn android:setup
+brew update && brew install bitrise
 ```
 
-### Detox Test
+### Run
 
 ```shell
-yarn test:android:ci
+bitrise run android-e2e
 ```
