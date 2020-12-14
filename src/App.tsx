@@ -23,7 +23,7 @@ export const App = () => {
   }, [formText])
   return (
     <SafeAreaView style={styles.wrapper}>
-      <KeyboardAvoidingView style={styles.inner}>
+      <KeyboardAvoidingView style={styles.inner} behavior="padding">
         {resultText ? (
           <View>
             <Text accessibilityLiveRegion="polite">
