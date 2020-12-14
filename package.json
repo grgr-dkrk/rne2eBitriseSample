@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "android:setup": "sh ./scripts/runAndroid.sh",
     "build:android:ci": "detox build -c android.emu.ci",
-    "test:android:ci": "detox test -c android.emu.ci -u -H -R -d 5000 -a artifacts/detox/ --take-screenshots all --record-logs all"
+    "test:android:ci": "detox test -c android.emu.ci -u -H -R 1 -d 5000 -a artifacts/detox/ --take-screenshots all --record-logs all"
   },
   "dependencies": {
     "detox": "^17.14.3",
